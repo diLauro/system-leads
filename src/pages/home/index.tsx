@@ -1,28 +1,28 @@
 import {
-  Button, Grid, IconButton, TextField, Tooltip, Typography
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { BiTask } from "react-icons/bi";
 import { FaRetweet, FaTable } from "react-icons/fa";
 import { RiDashboard3Line, RiEyeOffFill, RiUserAddFill } from "react-icons/ri";
 import { TbArrowBigLeft, TbArrowBigRight, TbFilterOff } from "react-icons/tb";
+import { FormLead } from "../../components/FormLead";
 import { ModalSimple } from "../../components/modal";
 import { TableList } from "../../components/TableList";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { useFetchAll } from "../../hook/FetchAll";
+import { useFetchDomains } from "../../hook/FetchDomains";
+import { Midias } from "../../types/Midas";
 
 export const Home = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const { domains } = useFetchDomains(["SERVICE", "ORIGIN"]);
+  const { dataList } = useFetchAll<Midias[]>("midias");
 
   return (
     <>
@@ -59,8 +59,6 @@ export const Home = () => {
             </IconButton>
           </Tooltip>
 
-       
-          
           <Tooltip title="Dashboard">
             <IconButton color="info">
               <RiDashboard3Line size={22} />
@@ -106,7 +104,9 @@ export const Home = () => {
         </Grid>
       </Grid>
 
-      <ModalSimple open={openModal} setOpen={setOpenModal} />
+      <ModalSimple open={openModal} setOpen={setOpenModal}>
+        <FormLead domains={domains} midia={dataList} />
+      </ModalSimple>
     </>
   );
 };
